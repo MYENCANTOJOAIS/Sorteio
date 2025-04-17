@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escolha Seu Presente - My Encanto Joias</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Escolha seu presente!</h1>
+    <div class="gift-boxes">
+      <div class="gift" data-premio="5% de desconto"></div>
+      <div class="gift" data-premio="10% de desconto"></div>
+      <div class="gift" data-premio="Frete grátis"></div>
+      <div class="gift" data-premio="Cupom especial"></div>
+    </div>
+    <form id="formulario">
+      <input type="text" name="nome" placeholder="Seu nome" required />
+      <input type="tel" name="telefone" placeholder="Seu telefone" required />
+      <input type="hidden" name="premio" id="premioSelecionado" />
+      <button type="submit">Confirmar</button>
+    </form>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
