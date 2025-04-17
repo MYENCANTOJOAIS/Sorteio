@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sorteio Encanto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #fff8dc;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .presente {
+      width: 100px;
+      height: 100px;
+      margin: 15px;
+      display: inline-block;
+      background-size: cover;
+      border: 4px solid transparent;
+      transition: border 0.3s;
+    }
+    .presente.ativo {
+      border-color: red;
+    }
+    #cadastro {
+      display: none;
+      margin-top: 30px;
+    }
+    input {
+      padding: 10px;
+      margin: 5px;
+      width: 80%;
+    }
+    button {
+      padding: 10px 20px;
+      background: #f39c12;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #resultado {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Descubra qual presente é seu prêmio!</h2>
+  <div id="presentes">
+    <div class="presente" style="background-image: url('https://cdn-icons-png.flaticon.com/512/4259/4259760.png')"></div>
+    <div class="presente" style="background-image: url('https://cdn-icons-png.flaticon.com/512/4259/4259766.png')"></div>
+    <div class="presente" style="background-image: url('https://cdn-icons-png.flaticon.com/512/4259/4259746.png')"></div>
+    <div class="presente" style="background-image: url('https://cdn-icons-png.flaticon.com/512/4259/4259754.png')"></div>
+  </div>
+
+  <div id="resultado"></div>
+
+  <div id="cadastro">
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="tel" id="telefone" placeholder="Seu telefone">
+    <button onclick="enviarWhatsApp()">Enviar para o WhatsApp</button>
+  </div>
+
+  <script>
+    const premios = ["5% de desconto", "10% de desconto", "Frete Grátis", "Cupom especial"];
+    const presentes = document.querySelectorAll('.presente');
+    let escolhido = null;
+
+    function animarSorteio() {
+      let i = 0;
+      let ciclos = 0;
+      const intervalo = setInterval(() => {
+        presentes.forEach(p => p.classList.remove('ativo'));
+        presentes[i].classList.add('ativo');
+        i = (i + 1) % presentes.length;
+        ciclos++;
+        if (ciclos > 20) {
+          clearInterval(intervalo);
+          escolhido = Math.floor(Math.random() * presentes.length);
+          presentes[escolhido].classList.add('ativo');
+          document.getElementById('resultado').textContent = `Você ganhou: ${premios[escolhido]}`;
+          document.getElementById('cadastro').style.display = 'block';
+        }
+      }, 150);
+    }
+
+    function enviarWhatsApp() {
+      const nome = document.getElementById('nome').value.trim();
+      const tel = document.getElementById('telefone').value.trim();
+      if (!nome || !tel) {
+        alert('Preencha nome e telefone');
+        return;
+      }
+      const premio = premios[escolhido];
+      const msg = encodeURIComponent(`Olá! ${nome} (${tel}) ganhou ${premio} no sorteio dos presentes!`);
+      window.open(`https://wa.me/5511913610324?text=${msg}`, '_blank');
+      localStorage.setItem('sorteio_' + tel, 'usado');
+    }
+
+    window.onload = () => {
+      const jaUsou = localStorage.getItem('sorteio_' + (new URLSearchParams(window.location.search).get('tel') || ''));
+      if (!jaUsou) animarSorteio();
+      else {
+        document.body.innerHTML = '<h2>Você já participou do sorteio!</h2>';
+      }
+    };
+  </script>
+</body>
+</html>
